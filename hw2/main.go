@@ -190,7 +190,6 @@ func (z Zookeeper) returnAnimalsToZoo(anims []Animal, cags []Cage) []Cage {
 }
 
 func (z Zookeeper) cageInfo(c Cage) {
-
 	if c.AnimalPlaced == nil {
 		fmt.Printf("cage #%d (%s) is free\n", c.Number, c.Feature)
 		return
@@ -198,8 +197,8 @@ func (z Zookeeper) cageInfo(c Cage) {
 	fmt.Printf("%s %s in cage #%d (%s)\n", c.AnimalPlaced.animType, c.AnimalPlaced.name, c.Number, c.Feature)
 }
 
-func (z Zookeeper) showZoo(k Zookeeper, cage []Cage) {
-	fmt.Printf("\nWelcome to %s's Zoo!\n\n~ ~ Roadmap ~ ~\n", k)
+func (z Zookeeper) showZoo(cage []Cage) {
+	fmt.Printf("\nWelcome to %s's Zoo!\n\n~ ~ Roadmap ~ ~\n", z)
 	for i := 0; i < len(cage); i++ {
 		z.cageInfo(cage[i])
 	}
@@ -209,5 +208,5 @@ func main() {
 	const keeper Zookeeper = "Felix"
 	var catchedAnimals = keeper.lookingForAnimals(runawayAnimals[:])
 	var zoo = keeper.returnAnimalsToZoo(catchedAnimals[:], freeCages[:])
-	keeper.showZoo(keeper, zoo)
+	keeper.showZoo(zoo)
 }
