@@ -209,7 +209,7 @@ func (c Cage) cageInfo() {
 
 		return
 	}
-	fmt.Printf("%s %s in cage #%d (%s)\n", c.AnimalPlaced.animType, c.AnimalPlaced.name, c.Number, c.Feature)
+	fmt.Printf("%s %s lives in cage #%d (%s)\n", c.AnimalPlaced.animType, c.AnimalPlaced.name, c.Number, c.Feature)
 }
 
 func (z Zookeeper) showZoo(cags []Cage) {
