@@ -8,13 +8,76 @@ const (
 	Lianas    string = "natural lianas"
 )
 
+type AnimalName string
+
+type Animal struct {
+	name        AnimalName
+	animType    string
+	catched     bool
+	cageRequire string
+}
+
+var animals = []Animal{
+	{
+		"Alex",
+		"lion",
+		false,
+		HighWalls,
+	}, {
+		"Marty",
+		"zebra",
+		false,
+		HighWalls,
+	}, {
+		"Melman",
+		"giraffe",
+		false,
+		HighWalls,
+	}, {
+		"Gloria",
+		"hippo",
+		true,
+		Water,
+	}, {
+		"Skipper",
+		"penguin",
+		false,
+		Water,
+	}, {
+		"Kowalski",
+		"penguin",
+		false,
+		Water,
+	}, {
+		"Rico",
+		"penguin",
+		false,
+		Water,
+	}, {
+		"King Julien XIII",
+		"lemur",
+		false,
+		Lianas,
+	}, {
+		"Mason",
+		"monkey",
+		false,
+		Lianas,
+	}, {
+		"Phil",
+		"monkey",
+		false,
+		Lianas,
+	},
+}
+
 type Cage struct {
 	Feature      string
 	Number       int
 	AnimalPlaced *Animal
 }
 
-var freeCages = [...]Cage{
+var cages = []Cage{
 	{
 		Water,
 		1,
@@ -23,7 +86,7 @@ var freeCages = [...]Cage{
 	{
 		Water,
 		2,
-		nil,
+		&animals[3], // Gloria did not run away from the cage
 	},
 	{
 		HighWalls,
@@ -92,78 +155,6 @@ var freeCages = [...]Cage{
 	},
 }
 
-type Animal struct {
-	name        string
-	animType    string
-	catched     bool
-	cagePlaced  bool
-	cageRequire string
-}
-
-var runawayAnimals = [...]Animal{
-	{
-		"Alex",
-		"lion",
-		false,
-		false,
-		HighWalls,
-	}, {
-		"Marty",
-		"zebra",
-		false,
-		false,
-		HighWalls,
-	}, {
-		"Melman",
-		"giraffe",
-		false,
-		false,
-		HighWalls,
-	}, {
-		"Gloria",
-		"hippo",
-		false,
-		false,
-		Water,
-	}, {
-		"Skipper",
-		"penguin",
-		false,
-		false,
-		Water,
-	}, {
-		"Kowalski",
-		"penguin",
-		false,
-		false,
-		Water,
-	}, {
-		"Rico",
-		"penguin",
-		false,
-		false,
-		Water,
-	}, {
-		"King Julien XIII",
-		"lemur",
-		false,
-		false,
-		Lianas,
-	}, {
-		"Mason",
-		"monkey",
-		false,
-		false,
-		Lianas,
-	}, {
-		"Phil",
-		"monkey",
-		false,
-		false,
-		Lianas,
-	},
-}
-
 type Zookeeper string
 
 func (z Zookeeper) lookingForAnimals(anims []Animal) []Animal {
@@ -174,39 +165,63 @@ func (z Zookeeper) lookingForAnimals(anims []Animal) []Animal {
 	return anims
 }
 
+func (z Zookeeper) isAnimalPlacedInCages(animal Animal, cags []Cage) (status bool) {
+	for i := 0; i < len(cags); i++ {
+		if cags[i].AnimalPlaced != nil && cags[i].AnimalPlaced.name == animal.name {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (z Zookeeper) isSuitableCage(animal Animal, cage Cage) (isSuitable bool) {
+	if cage.Feature == animal.cageRequire && cage.AnimalPlaced == nil {
+		cage.AnimalPlaced = &animal
+		return true
+	}
+
+	return false
+}
+
 func (z Zookeeper) returnAnimalsToZoo(anims []Animal, cags []Cage) []Cage {
 	for i := 0; i < len(anims); i++ {
-		if !anims[i].catched {
+		isInCage := z.isAnimalPlacedInCages(anims[i], cags)
+		if isInCage {
 			continue
 		}
+
 		for k := 0; k < len(cags); k++ {
-			if !anims[i].cagePlaced && cags[k].Feature == anims[i].cageRequire && cags[k].AnimalPlaced == nil {
-				anims[i].cagePlaced = true
+			isSuitable := z.isSuitableCage(anims[i], cags[k])
+			if isSuitable {
 				cags[k].AnimalPlaced = &anims[i]
+				break
 			}
 		}
 	}
+
 	return cags
 }
 
-func (z Zookeeper) cageInfo(c Cage) {
+func (c Cage) cageInfo() {
 	if c.AnimalPlaced == nil {
 		fmt.Printf("cage #%d (%s) is free\n", c.Number, c.Feature)
+
 		return
 	}
 	fmt.Printf("%s %s in cage #%d (%s)\n", c.AnimalPlaced.animType, c.AnimalPlaced.name, c.Number, c.Feature)
 }
 
-func (z Zookeeper) showZoo(cage []Cage) {
+func (z Zookeeper) showZoo(cags []Cage) {
 	fmt.Printf("\nWelcome to %s's Zoo!\n\n~ ~ Roadmap ~ ~\n", z)
-	for i := 0; i < len(cage); i++ {
-		z.cageInfo(cage[i])
+	for i := 0; i < len(cags); i++ {
+		cags[i].cageInfo()
 	}
 }
 
 func main() {
 	const keeper Zookeeper = "Felix"
-	var catchedAnimals = keeper.lookingForAnimals(runawayAnimals[:])
-	var zoo = keeper.returnAnimalsToZoo(catchedAnimals[:], freeCages[:])
-	keeper.showZoo(zoo)
+	var catchedAnimals = keeper.lookingForAnimals(animals)
+	var cages = keeper.returnAnimalsToZoo(catchedAnimals, cages)
+	keeper.showZoo(cages)
 }
