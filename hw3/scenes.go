@@ -1,72 +1,40 @@
 package main
 
-type SceneName string
-type Item string
-type SceneDesc struct {
+type sceneId string
+
+type scene struct {
 	desc       string
-	actions    []Action
-	actionList []SceneName
-	items      []Item
+	nextScenes []sceneId
 }
 
-var Scenes = make(map[SceneName]*SceneDesc)
+const Start sceneId = "start"
+const NearCave sceneId = "Біля печери"
+const Forest sceneId = "Ліс"
+const Cave sceneId = "Печера"
+const Camp sceneId = "Табір"
+const Tent sceneId = "Намет"
+const Exit sceneId = "Припинити гру"
 
-var scene1wake SceneName = "scene1wake"
-var key1 Item = "key1"
-var code1 Item = "7190"
-
-var scene2 SceneName = "scene2"
-
-type Action struct {
-	whatToDo       string
-	resultHappened string
-	modify         func()
-	nextScene      SceneName
-}
-
-var Pocket = []Item{}
-
-func addKeyToPocket() {
-	Pocket = append(Pocket, key1)
-}
-
-func writeCode1() {
-	Pocket = append(Pocket, code1)
-}
-
-func InitScenes() {
-
-	Scenes[scene1wake] = &SceneDesc{
-		"Ви проснулись в кімнаті на ліжку. Поряд з ліжком стоїть тумбочка, яка має одну шуфлядку. " +
-			"На тумбочці лежить книжка-оповідання відомого письменника",
-		[]Action{
-			{
-				"Подивитись що в тумбочці",
-				"В шухляді лежить ключ",
-				nil,
-				scene1wake,
-			},
-			{
-				"Погортати книжку",
-				"Всередині обгортки написані цифри 7190",
-				nil,
-				scene1wake,
-			},
-			{
-				"Покласти ключ до карману",
-				"Ключ перекладено до карману",
-				addKeyToPocket,
-				scene1wake,
-			},
-			{
-				"Десь записати ці цифри",
-				"був знайдений клаптик паперу та записані цифри",
-				writeCode1,
-				scene1wake,
-			},
+func InitScenes() map[sceneId]scene {
+	return map[sceneId]scene{
+		Start: {
+			"Стівен прокинувся біля входу в печеру. Він лише памʼятає своє імʼя. Поряд з ним рюкзак, в якому він знаходить сірники, ліхтарик і ніж.",
+			[]sceneId{Forest, Cave},
 		},
-		[]SceneName{scene1wake, scene2},
-		[]Item{key1, book1},
-	}
 
+		NearCave: {
+			"Стівен біля печери. З ним рюкзак, в якому є сірники, ліхтарик і ніж.",
+			[]sceneId{Forest, Cave},
+		},
+
+		Forest: {
+			"У лісі Стівен натикається на мертве тіло дивної тварини.",
+			[]sceneId{NearCave, Camp},
+		},
+
+		Camp: {
+			"Через деякий час Стівен приходить до безлюдного табору. Він вже втомлений і вирішує відпочити, а не йти далі. Заходить в найближчий намет",
+			[]sceneId{Forest, Tent},
+		},
+	}
 }
