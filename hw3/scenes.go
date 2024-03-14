@@ -16,7 +16,7 @@ const Tent sceneId = "Намет"
 const Exit sceneId = "Припинити гру"
 
 func InitScenes() map[sceneId]scene {
-	return map[sceneId]scene{
+	scenes := map[sceneId]scene{
 		Start: {
 			"Стівен прокинувся біля входу в печеру. Він лише памʼятає своє імʼя. Поряд з ним рюкзак, в якому він знаходить сірники, ліхтарик і ніж.",
 			[]sceneId{Forest, Cave},
@@ -37,4 +37,6 @@ func InitScenes() map[sceneId]scene {
 			[]sceneId{Forest, Tent},
 		},
 	}
+
+	return scenes
 }
