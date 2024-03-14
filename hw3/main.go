@@ -2,8 +2,8 @@ package main
 
 import "fmt"
 
-func printScene(sc string) {
-	fmt.Print("\n> ", sc, "\n\n")
+func printScene(sceneDesc string) {
+	fmt.Print("\n> ", sceneDesc, "\n\n")
 }
 
 func getWays(chooses []sceneId) {
