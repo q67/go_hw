@@ -2,65 +2,106 @@ package main
 
 type sceneId string
 
+type scenesList []map[sceneId]string
 type scene struct {
 	desc       string
-	nextScenes []sceneId
+	nextScenes *scenesList
 }
 
-const Start sceneId = "Почати гру заново"
-const NearCave sceneId = "До печери"
-const Forest sceneId = "Йти ліс"
-const Cave sceneId = "Зайти в печеру"
-const Camp sceneId = "До табіру"
-const Tent sceneId = "Зайти в намет"
+type scenesIn map[sceneId]scene
+
+const Start sceneId = "Заново"
+const NearCave sceneId = "Біля печери"
+const Forest sceneId = "Ліс"
+const Cave sceneId = "Печера"
+const Camp sceneId = "Табір"
+const Tent sceneId = "Намет"
 const Exit sceneId = "Припинити гру"
-const Safe sceneId = "Сейф"
+const Strongbox sceneId = "Сейф"
+const StrongBoxOpen sceneId = "Сейф-відчинений"
 const Death sceneId = "Непритомність"
 const Flashlight sceneId = "Ліхтарик"
 const Matches sceneId = "Сірники"
 
-func InitScenes() map[sceneId]scene {
-	scenes := map[sceneId]scene{
+func InitScenes() scenesIn {
+	return scenesIn{
 		Start: {
 			"Стівен прокинувся біля входу в печеру. Він лише памʼятає своє імʼя. Поряд з ним рюкзак, в якому він знаходить сірники, ліхтарик і ніж.",
-			[]sceneId{Forest, Cave},
+			&scenesList{
+				{Forest: "Йти до лісу"},
+				{Cave: "Оглянути печеру"},
+			},
 		},
 
 		NearCave: {
 			"Стівен біля печери. З ним рюкзак, в якому є сірники, ліхтарик і ніж.",
-			[]sceneId{Forest, Cave},
+			&scenesList{
+				{Forest: "Йти до лісу"},
+				{Cave: "Зайти печеру"},
+			},
 		},
 
 		Cave: {
-			"Стівен в печері але в ній темно, треба чимось підсвітити",
-			[]sceneId{Flashlight, Matches},
+			"В печері але в ній темно, треба чимось підсвітити",
+			&scenesList{
+				{Matches: "Спробувати сірники"},
+				{Flashlight: "Здається був ліхтарик"},
+				{NearCave: "Вийти з печери"},
+			},
+		},
+
+		Matches: {
+			"Сірники запалюються і швидко згорають, але все одно Стівен замітив надпис на стіні",
+			&scenesList{
+				{Flashlight: "Дістати ліхтарик"},
+				{NearCave: "Вийти з печери"},
+			},
+		},
+
+		Flashlight: {
+			"На стіні хтось написав 3489, цікаво, що це може бути",
+			&scenesList{
+				{NearCave: "Запам'ятати ці цифри та вийти"},
+			},
 		},
 
 		Forest: {
 			"У лісі Стівен натикається на мертве тіло дивної тварини.",
-			[]sceneId{NearCave, Camp},
+			&scenesList{
+				{NearCave: "Повернутись до печери"},
+				{Camp: "Нічого не робити та йти до табору"},
+			},
 		},
 
 		Camp: {
-			"Через деякий час Стівен приходить до безлюдного табору. Він вже втомлений і вирішує відпочити, а не йти далі. Заходить в найближчий намет",
-			[]sceneId{Forest, Tent},
+			"Стівен приходить до безлюдного табору. Він вже втомлений і вирішує відпочити, а не йти далі.",
+			&scenesList{
+				{Forest: "Повернутись до лісу"},
+				{Tent: "Зайти в найближчий намет"},
+			},
 		},
 
 		Tent: {
-			"У найближчому наметі він знаходить сейф з кодовим замком з двох чисел. ",
-			[]sceneId{Safe, Camp},
+			"У найближчому наметі він знаходить сейф з кодовим замком",
+			&scenesList{
+				{Strongbox: "Спробувати ввести якийсь код"},
+				{Camp: "Вийти з намету"},
+			},
 		},
 
-		Safe: {
-			"Він добирає код, і коли сейф відчиняється, йому на долоню виповзає велика комаха, кусає його й тікає.",
-			[]sceneId{Death},
+		Strongbox: {
+			"Сейф пише введений код не підходить",
+			&scenesList{
+				{Strongbox: "Ще раз спробувати ввести інший код"},
+				{Camp: "Вийти з намету"},
+			},
 		},
 
-		Death: {
-			"Стівен непритомніє. А все могло бути зовсім інакше.",
-			[]sceneId{Start},
+		StrongBoxOpen: {
+			"Cейф відчиняється, йому на долоню виповзає велика комаха, кусає його й тікає.",
+			&scenesList{
+				{Start: "Стівен непритомніє. А все могло бути зовсім інакше. Почати гру заново"},
+			},
 		},
 	}
-
-	return scenes
 }
