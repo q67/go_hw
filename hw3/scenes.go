@@ -2,8 +2,6 @@ package main
 
 type sceneId string
 
-// type scenesList []map[sceneId]string
-
 type nextScene struct {
 	nextSceneId sceneId
 	action      string
