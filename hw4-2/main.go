@@ -5,40 +5,69 @@ import (
 	"sort"
 )
 
-type number struct {
-	id int
+type mystruct struct {
+	id     int
+	field1 int
+	field2 string
+	field3 bool
 }
 
-func includesInt(what int, nums []int) bool {
-	for _, num := range nums {
-		if num == what {
-			return true
+func getUniqIds(ids []int) []int {
+	uniqs := []int{}
+
+	for _, id := range ids {
+		isUniqId := true
+		for _, uniqId := range uniqs {
+			if id == uniqId {
+				isUniqId = false
+				break
+			}
+		}
+		if isUniqId {
+			uniqs = append(uniqs, id)
 		}
 	}
-	return false
+
+	return uniqs
 }
 
-func uniqAndSort(data []number) []number {
-	var uniqInts = []int{}
-	for _, value := range data {
-		if !includesInt(value.id, uniqInts) {
-			uniqInts = append(uniqInts, value.id)
+func getIndexById(id int, elements []mystruct) int {
+	for index, elem := range elements {
+		if id == elem.id {
+			return index
 		}
 	}
 
-	sort.Ints(uniqInts)
-	uniqAndSortedNumbers := []number{}
-	for _, value := range uniqInts {
-		var num number
-		num.id = value
-		uniqAndSortedNumbers = append(uniqAndSortedNumbers, num)
+	return -1
+}
+
+func sortAndUniq(sliceIn []mystruct) []mystruct {
+	var ids = make([]int, len(sliceIn))
+	for i, value := range sliceIn {
+		ids[i] = value.id
 	}
 
-	return uniqAndSortedNumbers
+	sort.Ints(ids)
+	ids = getUniqIds(ids)
+
+	sliceOut := []mystruct{}
+	for _, id := range ids {
+		index := getIndexById(id, sliceIn)
+		if index >= 0 {
+			sliceOut = append(sliceOut, sliceIn[index])
+		}
+	}
+
+	return sliceOut
 }
 
 func main() {
-	values := []number{{3}, {2}, {1}, {2}}
-	uniqsAndSorted := uniqAndSort(values)
-	fmt.Println(uniqsAndSorted)
+	values := []mystruct{
+		{5, 0, "ttt", false},
+		{4, 9, "sus", true},
+		{1, 4, "str", false},
+		{4, 2, "ws", true},
+	}
+	uniqsAndSorted := sortAndUniq(values)
+	fmt.Println(values, "->", uniqsAndSorted)
 }
