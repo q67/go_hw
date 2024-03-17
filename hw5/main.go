@@ -186,6 +186,6 @@ func main() {
 	drukerTime("time of index search (hw5): ", time3)
 
 	fmt.Println("random words:", randomWords)
-	drukerTime("time of direct search random words: ", time5)
-	drukerTime("time of index searc random words: ", time6)
+	drukerTime("time of random words direct search : ", time5)
+	drukerTime("time of random words index search: ", time6)
 }
