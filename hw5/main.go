@@ -180,7 +180,7 @@ func main() {
 	drukerTime("time of build indexes (hw5): ", time2)
 
 	drukerLines("-> compare lines (hw4):\n", lines1, status1)
-	drukerLines("-> with lines (hw5):\n", lines2, status2)
+	drukerLines("<- with lines (hw5):\n", lines2, status2)
 
 	drukerTime("time of direct search (hw4): ", time1)
 	drukerTime("time of index search (hw5): ", time3)
