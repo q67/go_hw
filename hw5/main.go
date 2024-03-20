@@ -76,8 +76,8 @@ func buildIndexes(inputText []string) db {
 		for _, word := range words {
 			word = strings.TrimSpace(word)
 			word = strings.ToLower(word)
-			word = strings.TrimSuffix(word, ".")
-			word = strings.TrimSuffix(word, ",")
+			word = strings.TrimRight(word, ".,")
+
 			if containInts(indexes[word], textIndex) {
 				continue
 			}
@@ -127,15 +127,15 @@ func getRandomWords(indexes db) []string {
 
 func drukerLines(comment string, lines []string, status bool) {
 	fmt.Printf("%s", comment)
-	if status {
-		if len(lines) > 0 {
-			for i, line := range lines {
+	if len(lines) > 0 {
+		for i, line := range lines {
+			if status {
 				fmt.Printf("%d) %s\n", i+1, line)
+			} else {
+				fmt.Printf("%s\n", line)
 			}
 		}
-		return
 	}
-	fmt.Printf("%s\n", lines[0])
 }
 
 func drukerTime(comment string, time time.Duration) {
