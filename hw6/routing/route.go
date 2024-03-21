@@ -16,12 +16,10 @@ type Route struct {
 }
 
 func NewRoute() *Route {
-	r := &Route{
+	return &Route{
 		transports: make(map[string]PublicTransport),
 		route:      []string{},
 	}
-
-	return r
 }
 
 func (r *Route) AddTransport(transport string, pt PublicTransport, from primitives.Point, to primitives.Point) {
@@ -31,7 +29,7 @@ func (r *Route) AddTransport(transport string, pt PublicTransport, from primitiv
 	r.route = append(r.route, fromLine, toLine)
 }
 
-func (r Route) ShowTransport() {
+func (r *Route) ShowTransport() {
 	for _, line := range r.route {
 		fmt.Print(line)
 	}
