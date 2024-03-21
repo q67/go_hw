@@ -43,5 +43,5 @@ func main() {
 	route.AddTransport("Рейс 8943", &transport.Plane{}, transfer2, transfer3)
 	route.AddTransport("Rhein Bahn 03", &transport.Train{}, transfer3, finish)
 
-	route.ShowTransport()
+	route.ShowRoute()
 }

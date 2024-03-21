@@ -29,7 +29,7 @@ func (r *Route) AddTransport(transport string, pt PublicTransport, from primitiv
 	r.route = append(r.route, fromLine, toLine)
 }
 
-func (r *Route) ShowTransport() {
+func (r *Route) ShowRoute() {
 	for _, line := range r.route {
 		fmt.Print(line)
 	}
