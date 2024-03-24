@@ -2,35 +2,28 @@ package routing
 
 import (
 	"fmt"
-	"hw6/primitives"
 )
 
 type PublicTransport interface {
-	InPassengers(trasport string, point primitives.Point) string
-	OutPassengers(trasport string, point primitives.Point) string
+	InPassengers() string
+	OutPassengers() string
 }
 
 type Route struct {
-	transports map[string]PublicTransport
-	route      []string
+	transports []PublicTransport
 }
 
 func NewRoute() *Route {
-	return &Route{
-		transports: make(map[string]PublicTransport),
-		route:      []string{},
-	}
+	return &Route{}
 }
 
-func (r *Route) AddTransport(transport string, pt PublicTransport, from primitives.Point, to primitives.Point) {
-	r.transports[transport] = pt
-	fromLine := r.transports[transport].InPassengers(transport, from)
-	toLine := r.transports[transport].OutPassengers(transport, to)
-	r.route = append(r.route, fromLine, toLine)
+func (r *Route) AddTransport(pt PublicTransport) {
+	r.transports = append(r.transports, pt)
 }
 
 func (r *Route) ShowRoute() {
-	for _, line := range r.route {
-		fmt.Print(line)
+	for _, transport := range r.transports {
+		fmt.Print(transport.InPassengers())
+		fmt.Print(transport.OutPassengers())
 	}
 }

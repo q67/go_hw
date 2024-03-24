@@ -6,12 +6,19 @@ import (
 )
 
 type Train struct {
+	name  string
+	start primitives.Point
+	stop  primitives.Point
 }
 
-func (t *Train) InPassengers(transport string, station primitives.Point) string {
-	return fmt.Sprintf("Сісти на поїзд %s на станції %s %s\n", transport, station.City, station.Country)
+func NewTrain(name string, start primitives.Point, stop primitives.Point) *Train {
+	return &Train{name, start, stop}
 }
 
-func (t *Train) OutPassengers(transport string, station primitives.Point) string {
-	return fmt.Sprintf("Зійти з поїзду %s на станції %s %s\n", transport, station.City, station.Country)
+func (t *Train) InPassengers() string {
+	return fmt.Sprintf("Сісти на поїзд %s на станції %s %s\n", t.name, t.start.City, t.start.Country)
+}
+
+func (t *Train) OutPassengers() string {
+	return fmt.Sprintf("Зійти з поїзду %s на станції %s %s\n", t.name, t.start.City, t.start.Country)
 }

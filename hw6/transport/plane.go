@@ -6,12 +6,19 @@ import (
 )
 
 type Plane struct {
+	name  string
+	start primitives.Point
+	stop  primitives.Point
 }
 
-func (p *Plane) InPassengers(transport string, airport primitives.Point) string {
-	return fmt.Sprintf("Сісти на літак %s в аеропорті %s %s\n", transport, airport.City, airport.Country)
+func NewPlane(name string, start primitives.Point, stop primitives.Point) *Plane {
+	return &Plane{name, start, stop}
 }
 
-func (p *Plane) OutPassengers(transport string, airport primitives.Point) string {
-	return fmt.Sprintf("Зійти з літака %s в аеропорті %s %s\n", transport, airport.City, airport.Country)
+func (p *Plane) InPassengers() string {
+	return fmt.Sprintf("Сісти на літак %s в аеропорті %s %s\n", p.name, p.start.City, p.start.Country)
+}
+
+func (p *Plane) OutPassengers() string {
+	return fmt.Sprintf("Зійти з літака %s в аеропорті %s %s\n", p.name, p.stop.City, p.stop.Country)
 }

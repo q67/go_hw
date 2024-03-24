@@ -38,10 +38,14 @@ func main() {
 	}
 
 	route := routing.NewRoute()
-	route.AddTransport("Маршрутка 575", &transport.Bus{}, start, transfer1)
-	route.AddTransport("Автобус 44", &transport.Bus{}, transfer1, transfer2)
-	route.AddTransport("Рейс 8943", &transport.Plane{}, transfer2, transfer3)
-	route.AddTransport("Rhein Bahn 03", &transport.Train{}, transfer3, finish)
+	bus1 := transport.NewBus("Маршрутка 575", start, transfer1)
+	route.AddTransport(bus1)
+	bus2 := transport.NewBus("Автобус 44", transfer1, transfer2)
+	route.AddTransport(bus2)
+	plane := transport.NewPlane("Рейс 8943", transfer2, transfer3)
+	route.AddTransport(plane)
+	train := transport.NewTrain("Rhein Bahn 03", transfer3, finish)
+	route.AddTransport(train)
 
 	route.ShowRoute()
 }
