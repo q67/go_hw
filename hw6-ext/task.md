@@ -12,3 +12,6 @@ WetherAPIForecast - має робити HTTP Get запит за реальни�
 Корисні посилання:
 https://pkg.go.dev/net/http#Get
 https://wttr.in/Kyiv?format=3
+
+--
+
